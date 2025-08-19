@@ -6,6 +6,7 @@ import { Navbar } from "@/app/components/navbar/navbar";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import { Footer } from "@/app/components/footer";
+import { ReactNode } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,19 +16,15 @@ export const metadata: Metadata = {
     "Julian Valle is Full Stack Developer, building amazing sites using React, Vue, and Next.js.",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className} scroll-smooth bg-slate-50 dark:bg-slate-950`}
+        className={`${inter.className} scroll-smooth bg-slate-50 dark:bg-slate-950 relative`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Navbar />
-          {children}
+          <main className="container mx-auto">{children}</main>
           <Footer />
         </ThemeProvider>
         <SpeedInsights />

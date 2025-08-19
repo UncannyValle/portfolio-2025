@@ -4,7 +4,7 @@ import { FaEnvelope, FaLinkedin } from "react-icons/fa";
 
 export const Footer = async () => {
   return (
-    <footer className="flex flex-wrap items-center justify-center p-8 text-slate-500">
+    <footer className="flex flex-wrap items-center justify-center p-8 text-slate-500 absolute bottom-0 left-0 right-0">
       <div className="inline-block">
         Designed and coded by me &quot;Julian Valle&quot;. Built with Next.js,
         Sanity, and Tailwind and deployed in Vercel.

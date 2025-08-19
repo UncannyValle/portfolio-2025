@@ -2,14 +2,26 @@
 import Link from "next/link";
 import { useState } from "react";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { MobileNavbar } from "./mobileNavbar";
-import { HamburgerMenu } from "./hamburgerMenu";
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+} from "@/app/components/ui/navigation-menu";
 import { ThemeSwitcher } from "@/app/components/theme-switcher";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerTrigger,
+} from "@/app/components/ui/drawer";
+import { HamburgerMenu } from "@/app/components/navbar/hamburgerMenu";
+import { NAV_LINKS } from "@/app/lib/constants/links";
 
 export const Navbar = () => {
   const [visible, setVisible] = useState(true);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false); // This is for the drawer state
 
   const { scrollY } = useScroll();
 
@@ -48,45 +60,51 @@ export const Navbar = () => {
           >
             {`<Julian Valle.dev />`}
           </Link>
-          {/* hamburger */}
-          <HamburgerMenu toggle={() => setIsOpen(!isOpen)} />
 
-          <div className="hidden w-1/2 items-center justify-between lg:flex">
-            <Link
-              href="/#about-me"
-              className="rounded-full px-4 py-3 transition ease-in-out hover:scale-110 active:scale-100 dark:hover:bg-purple-600"
-            >
-              About
-            </Link>
-            <Link
-              href="/#skills"
-              className="rounded-full px-4 py-3 transition ease-in-out hover:scale-110 active:scale-100 dark:hover:bg-purple-600"
-            >
-              Skills
-            </Link>
-            <Link
-              href="/#projects"
-              className="rounded-full px-4 py-3 duration-200 hover:scale-110 active:scale-100 dark:hover:bg-purple-600"
-            >
-              Projects
-            </Link>
-            <Link
-              href="/#careers"
-              className="rounded-full px-4 py-3 duration-200 hover:scale-110 active:scale-100 dark:hover:bg-purple-600"
-            >
-              Careers
-            </Link>
-            <Link
-              href="/#contact"
-              className="rounded-full px-4 py-3 duration-200 hover:scale-110 active:scale-100 dark:hover:bg-purple-600"
-            >
-              Contact
-            </Link>
-            <ThemeSwitcher />
-          </div>
+          {/* Mobile Drawer */}
+          <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+            <DrawerTrigger asChild>
+              <HamburgerMenu isOpen={drawerOpen} />
+            </DrawerTrigger>
+            <DrawerContent>
+              <div className="flex flex-col items-center justify-center p-8 space-y-6">
+                <Link
+                  href="/"
+                  className="text-lg p-4 m-0 hover:text-purple-400 transition"
+                  onClick={() => setDrawerOpen(false)}
+                >
+                  Home
+                </Link>
+                {NAV_LINKS.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="text-lg p-4 m-0 hover:text-purple-400 transition"
+                    onClick={() => setDrawerOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                <ThemeSwitcher />
+              </div>
+            </DrawerContent>
+          </Drawer>
 
-          {/* Mobile navbar */}
-          <MobileNavbar isOpen={isOpen} />
+          {/* Desktop Navigation */}
+          <NavigationMenu className="hidden lg:flex">
+            <NavigationMenuList>
+              {NAV_LINKS.map((item) => (
+                <NavigationMenuItem key={item.href}>
+                  <NavigationMenuLink href={item.href}>
+                    {item.label}
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+              ))}
+              <NavigationMenuItem>
+                <ThemeSwitcher />
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
         </motion.div>
       </nav>
     </motion.header>
